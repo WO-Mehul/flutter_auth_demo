@@ -12,12 +12,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Home Screen")),
-      body: Center(child:  RaisedButton(
-                  child: Text("LOGOUT"),
-                  onPressed: () async {                                 
-                      await Provider.of<AuthService>(context).logout();                
-                    }
-                  ),),
+     floatingActionButton: FloatingActionButton.extended(
+        label: Text('Sign out'),
+        onPressed: () async {
+          final auth = Provider.of<AuthService>(context, listen: false);
+          await auth.signOut();
+        },
+      ),
     );
   }
 }

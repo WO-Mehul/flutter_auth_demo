@@ -48,17 +48,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     form.save();
 
                     // Validate will return true if is valid, or false if invalid.
-                    if (form.validate()) {
-                      var result = await Provider.of<AuthService>(context)
-                          .loginUser(email: _email, password: _password);
-                          print(result);
-                      if (result == null) {
-                        // see project in github for this code
-                        //return _buildShowErrorDialog(context,
-                        //    "Error Logging In With Those Credentials");
+                    try {
+                      if (form.validate()) {
+                        await Provider.of<AuthService>(context, listen: false)
+                            .signIn(email: _email, password: _password);
                       }
+                    } catch (e) {
+                      print(e.message);
                     }
                   }),
+              SizedBox(height: 20.0),
+              RaisedButton(
+                  child: Text("SIGNUP"),
+                  onPressed: () async {
+                    Navigator.of(context).pushNamed("/signup");
+                  }),
+              SizedBox(height: 20.0),
             ],
           ),
         ),
@@ -66,5 +71,3 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
-class _email {}
