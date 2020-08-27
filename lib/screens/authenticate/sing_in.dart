@@ -3,6 +3,55 @@ import 'package:flutter_auth_demo/services/auth.dart';
 import 'package:flutter_auth_demo/shared/constants.dart';
 import 'package:flutter_auth_demo/shared/loader.dart';
 
+final AuthService _auth = AuthService();
+
+Widget _buildSocialBtn(Function onTap, AssetImage logo) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      height: 50.0,
+      width: 50.0,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            offset: Offset(0, 2),
+            blurRadius: 6.0,
+          ),
+        ],
+        image: DecorationImage(
+          image: logo,
+        ),
+      ),
+    ),
+  );
+}
+
+Widget _buildSocialBtnRow() {
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: 15.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        _buildSocialBtn(
+          () => _auth.signInWithFacebook(),
+          AssetImage(
+            'assets/logos/facebook.jpg',
+          ),
+        ),
+        _buildSocialBtn(
+          () => print('Login with Google'),
+          AssetImage(
+            'assets/logos/google.jpg',
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 class SignIn extends StatefulWidget {
   final Function toggleView;
   SignIn({this.toggleView});
@@ -12,7 +61,7 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  final AuthService _auth = AuthService();
+  
   final _formKey = GlobalKey<FormState>();
   String error = '';
   bool loading = false;
@@ -57,7 +106,7 @@ class _SignInState extends State<SignIn> {
                                 ],
                               ),
                             ),
-                            SizedBox(height: 20.0),
+                            SizedBox(height: 10.0),
                             TextFormField(
                               decoration: textInputDecoration.copyWith(
                                   hintText: 'Email'),
@@ -67,7 +116,7 @@ class _SignInState extends State<SignIn> {
                                 setState(() => email = val);
                               },
                             ),
-                            SizedBox(height: 20.0),
+                            SizedBox(height: 10.0),
                             TextFormField(
                               decoration: textInputDecoration.copyWith(
                                   hintText: 'Password'),
@@ -78,7 +127,7 @@ class _SignInState extends State<SignIn> {
                                 setState(() => password = val);
                               },
                             ),
-                            SizedBox(height: 20.0),
+                            SizedBox(height: 10.0),
                             Container(
                               width: MediaQuery.of(context).size.width - 100,
                               child: RaisedButton(
@@ -112,6 +161,15 @@ class _SignInState extends State<SignIn> {
                                 },
                               ),
                             ),
+                            SizedBox(height: 20.0),
+                            Text('- OR -'),
+                            SizedBox(height: 20.0),
+                            Text('Sign in with',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                )),
+                            _buildSocialBtnRow(),
                             SizedBox(height: 20.0),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as authPack;
 import 'package:flutter_auth_demo/models/user.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthService {
   final authPack.FirebaseAuth _auth = authPack.FirebaseAuth.instance;
@@ -48,6 +49,18 @@ class AuthService {
       return null;
     }
   }
+
+  Future<authPack.UserCredential> signInWithFacebook() async {
+  // Trigger the sign-in flow
+  final LoginResult result = await FacebookAuth.instance.login();
+
+  // Create a credential from the access token
+  final authPack.FacebookAuthCredential facebookAuthCredential =
+    authPack.FacebookAuthProvider.credential(result.accessToken.token);
+
+  // Once signed in, return the UserCredential
+  return await authPack.FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+}
 
   // sign out
   Future signOut() async {
